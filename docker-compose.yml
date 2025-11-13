@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fortstore-frontend
+    ports:
+      - "8080:80"
+    environment:
+      - VUE_APP_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - fortstore-network
+    restart: unless-stopped
+
+networks:
+  fortstore-network:
+    external: true
+
