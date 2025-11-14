@@ -2,11 +2,15 @@
   <div 
     class="cosmetic-card" 
     @click="goToDetail"
-    :class="{ 'cosmetic-card--owned': isOwned }"
+    :class="{ 
+      'cosmetic-card--owned': isOwned,
+      'cosmetic-card--new': isNew
+    }"
   >
     <div class="cosmetic-card__badges">
       <span v-if="isNew" class="cosmetic-card__badge cosmetic-card__badge--new">NOVO</span>
-      <span v-if="isOnSale" class="cosmetic-card__badge cosmetic-card__badge--sale">À VENDA</span>
+      <span v-if="isPromoted" class="cosmetic-card__badge cosmetic-card__badge--promoted">EM PROMOÇÃO</span>
+      <span v-else-if="isOnSale" class="cosmetic-card__badge cosmetic-card__badge--sale">À VENDA</span>
       <span v-if="isOwned" class="cosmetic-card__badge cosmetic-card__badge--owned">ADQUIRIDO</span>
     </div>
     
@@ -67,7 +71,7 @@ export default {
   },
   setup(props) {
     const router = useRouter();
-    const { iconImage, isNew, isOnSale, isOwned, rarityColor } = useCosmetic(props.cosmetic);
+    const { iconImage, isNew, isOnSale, isPromoted, isOwned, rarityColor } = useCosmetic(props.cosmetic);
     const imageError = ref(false);
 
     const goToDetail = () => {
@@ -101,6 +105,7 @@ export default {
       iconImage,
       isNew,
       isOnSale,
+      isPromoted,
       isOwned,
       rarityColor,
       imageError,
@@ -149,6 +154,26 @@ export default {
   z-index: 1;
 }
 
+.cosmetic-card--new {
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+.cosmetic-card--new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  z-index: 1;
+}
+
+.cosmetic-card--owned.cosmetic-card--new::before {
+  background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+  border-color: rgba(52, 152, 219, 0.3);
+}
+
 .cosmetic-card__badges {
   position: absolute;
   top: 12px;
@@ -179,6 +204,13 @@ export default {
   background: rgba(231, 76, 60, 0.9);
   color: #fff;
   box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.cosmetic-card__badge--promoted {
+  background: rgba(241, 196, 15, 0.9);
+  color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(241, 196, 15, 0.3);
+  font-weight: 800;
 }
 
 .cosmetic-card__badge--owned {
