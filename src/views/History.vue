@@ -56,8 +56,6 @@
 <script>
 import { ref, onMounted } from 'vue';
 import api from '../services/api';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 export default {
   name: 'History',
@@ -68,8 +66,27 @@ export default {
     const loadTransactions = async () => {
       loading.value = true;
       try {
-        const response = await api.get('/api/transactions');
-        transactions.value = response.data || [];
+        const response = await api.get('/api/users/purchase-history');
+        const cosmetics = response.data.data || response.data || [];
+        
+        const transactionList = [];
+        cosmetics.forEach(cosmetic => {
+          if (cosmetic.purchased_at) {
+            transactionList.push({
+              id: `purchase-${cosmetic.id}`,
+              type: 'purchase',
+              cosmetic_name: cosmetic.name,
+              amount: cosmetic.purchase_price || cosmetic.price || 0,
+              created_at: cosmetic.purchased_at,
+            });
+          }
+        });
+        
+        transactionList.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        
+        transactions.value = transactionList;
       } catch (error) {
         transactions.value = [];
       } finally {
@@ -79,8 +96,13 @@ export default {
 
     const formatDate = (date) => {
       if (!date) return '';
-      return format(new Date(date), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
-        locale: ptBR,
+      const d = new Date(date);
+      return d.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
       });
     };
 
@@ -181,11 +203,11 @@ export default {
 }
 
 .transaction-card--purchase {
-  border-left: 3px solid #e74c3c;
+  border-left: 3px solid #667eea;
 }
 
 .transaction-card--return {
-  border-left: 3px solid #2ecc71;
+  border-left: 3px solid #764ba2;
 }
 
 .transaction-card__icon {
@@ -222,11 +244,11 @@ export default {
 }
 
 .amount--negative {
-  color: #e74c3c;
+  color: #667eea;
 }
 
 .amount--positive {
-  color: #2ecc71;
+  color: #8b9aff;
 }
 
 .empty-state {

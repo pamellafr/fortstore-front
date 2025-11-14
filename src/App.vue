@@ -76,7 +76,6 @@ export default {
   min-height: calc(100vh - 64px);
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

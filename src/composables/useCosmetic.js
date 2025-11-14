@@ -83,66 +83,43 @@ export function useCosmetic(cosmetic) {
   });
 
   const isNew = computed(() => {
-    // Se o backend retornou true, confia nele
-    if (cosmetic?.is_new === true) {
-      return true;
+    if (cosmetic?.is_new !== undefined && cosmetic?.is_new !== null) {
+      return Boolean(cosmetic.is_new);
     }
     
-    // Sempre calcula baseado na data para garantir que funciona
-    // Verifica added_date, created_at ou updated_at (últimos 30 dias)
-    const now = new Date();
-    const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+    if (!cosmetic?.added_date) {
+      return false;
+    }
     
     try {
-      // Prioridade 1: added_date
-      if (cosmetic?.added_date) {
-        const addedDate = new Date(cosmetic.added_date);
-        if (addedDate >= thirtyDaysAgo) {
-          return true;
-        }
+      const now = new Date();
+      const addedDate = new Date(cosmetic.added_date);
+      
+      if (isNaN(addedDate.getTime())) {
+        return false;
       }
       
-      // Prioridade 2: created_at (se added_date não existe)
-      if (!cosmetic?.added_date && cosmetic?.created_at) {
-        const createdDate = new Date(cosmetic.created_at);
-        if (createdDate >= thirtyDaysAgo) {
-          return true;
-        }
-      }
+      const diffTime = now - addedDate;
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
       
-      // Prioridade 3: updated_at
-      if (cosmetic?.updated_at) {
-        const updatedDate = new Date(cosmetic.updated_at);
-        if (updatedDate >= thirtyDaysAgo) {
-          return true;
-        }
-      }
-      
-      return false;
+      return diffDays >= 0 && diffDays <= 30;
     } catch (e) {
-      // Se o backend retornou true, confia nele mesmo com erro no cálculo
-      return cosmetic?.is_new === true;
+      return false;
     }
   });
 
   const isOnSale = computed(() => {
-    // Sempre calcula baseado no interest para garantir que funciona
-    // À venda: interest >= 0.6 e < 0.75 (promoção é >= 0.75)
     if (cosmetic?.interest === null || cosmetic?.interest === undefined) {
-      // Se o backend retornou true, confia nele mesmo sem interest
       return cosmetic?.is_on_sale === true;
     }
     
     const interest = parseFloat(cosmetic.interest);
     const isOnSaleItem = interest >= 0.6 && interest < 0.75;
     
-    // Se o backend retornou true, confia nele
     if (cosmetic?.is_on_sale === true) {
       return true;
     }
     
-    // Caso contrário, usa o cálculo local (mas não deve ser promovido)
-    // Se for promovido (>= 0.75), não está à venda
     if (interest >= 0.75) {
       return false;
     }
@@ -151,21 +128,17 @@ export function useCosmetic(cosmetic) {
   });
   
   const isPromoted = computed(() => {
-    // Sempre calcula baseado no interest para garantir que funciona
     if (cosmetic?.interest === null || cosmetic?.interest === undefined) {
-      // Se o backend retornou true, confia nele mesmo sem interest
       return cosmetic?.is_promoted === true;
     }
     
     const interest = parseFloat(cosmetic.interest);
     const isPromotedItem = interest >= 0.75;
     
-    // Se o backend retornou true, confia nele
     if (cosmetic?.is_promoted === true) {
       return true;
     }
     
-    // Caso contrário, usa o cálculo local
     return isPromotedItem;
   });
 
@@ -180,8 +153,8 @@ export function useCosmetic(cosmetic) {
       UNCOMMON: '#73C373',
       RARE: '#5B9BD5',
       EPIC: '#9B59B6',
-      LEGENDARY: '#E67E22',
-      MYTHIC: '#E74C3C',
+      LEGENDARY: '#8b9aff',
+      MYTHIC: '#764ba2',
     };
     return rarityMap[cosmetic?.rarity_name] || '#B4B4B4';
   });

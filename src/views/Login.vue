@@ -279,9 +279,9 @@ export default {
 }
 
 .alert--error {
-  background: rgba(231, 76, 60, 0.1);
-  border: 1px solid rgba(231, 76, 60, 0.3);
-  color: #e74c3c;
+  background: rgba(118, 75, 162, 0.1);
+  border: 1px solid rgba(118, 75, 162, 0.3);
+  color: #764ba2;
 }
 
 .login-card__footer {

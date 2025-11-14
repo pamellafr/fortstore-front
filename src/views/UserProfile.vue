@@ -82,14 +82,14 @@ export default {
       loading.value = true;
       try {
         const userId = route.params.id;
-        const [userResponse, cosmeticsResponse] = await Promise.all([
-          api.get(`/api/users/${userId}`),
-          api.get(`/api/users/${userId}/cosmetics`),
-        ]);
-        user.value = userResponse.data;
-        userCosmetics.value = cosmeticsResponse.data || [];
+        const response = await api.get(`/api/users/${userId}`);
+        if (response.data) {
+          user.value = response.data.user;
+          userCosmetics.value = response.data.cosmetics || [];
+        }
       } catch (error) {
         user.value = null;
+        userCosmetics.value = [];
       } finally {
         loading.value = false;
       }

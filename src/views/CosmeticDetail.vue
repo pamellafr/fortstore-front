@@ -519,7 +519,6 @@ export default {
           cosmetic.value = result.data;
         }
       } catch (error) {
-        // Silent error handling
       } finally {
         loading.value = false;
       }
@@ -738,17 +737,17 @@ export default {
 }
 
 .badge--new {
-  background: rgba(46, 204, 113, 0.95);
+  background: rgba(118, 75, 162, 0.95);
   color: #fff;
 }
 
 .badge--sale {
-  background: rgba(231, 76, 60, 0.95);
+  background: rgba(102, 126, 234, 0.95);
   color: #fff;
 }
 
 .badge--owned {
-  background: rgba(52, 152, 219, 0.95);
+  background: rgba(102, 126, 234, 0.95);
   color: #fff;
 }
 
@@ -915,14 +914,14 @@ export default {
 }
 
 .btn--secondary {
-  background: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  border: 2px solid rgba(231, 76, 60, 0.3);
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 2px solid rgba(102, 126, 234, 0.3);
 }
 
 .btn--secondary:hover:not(:disabled) {
-  background: rgba(231, 76, 60, 0.2);
-  border-color: rgba(231, 76, 60, 0.5);
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.5);
 }
 
 .btn--large {
@@ -943,8 +942,8 @@ export default {
 .auth-prompt,
 .insufficient-funds {
   padding: 24px;
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.3);
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 12px;
   text-align: center;
   color: rgba(255, 255, 255, 0.9);
@@ -956,17 +955,17 @@ export default {
 
 .auth-prompt svg,
 .insufficient-funds svg {
-  color: rgba(255, 193, 7, 0.8);
+  color: rgba(102, 126, 234, 0.8);
 }
 
 .insufficient-funds {
-  background: rgba(231, 76, 60, 0.1);
-  border-color: rgba(231, 76, 60, 0.3);
-  color: #e74c3c;
+  background: rgba(118, 75, 162, 0.1);
+  border-color: rgba(118, 75, 162, 0.3);
+  color: #764ba2;
 }
 
 .insufficient-funds svg {
-  color: #e74c3c;
+  color: #764ba2;
 }
 
 .loading {

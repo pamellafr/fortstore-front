@@ -11,6 +11,7 @@
       <nav class="header__nav">
         <router-link to="/" class="header__link">Descobrir</router-link>
         <router-link to="/cosmetics" class="header__link">Navegar</router-link>
+        <router-link to="/users" class="header__link">Usuários</router-link>
       </nav>
       
       <div class="header__right">
@@ -20,6 +21,7 @@
             <span class="header__v-bucks-amount">{{ formatVBucks(authStore.user?.credits || authStore.user?.credit?.amount || 0) }}</span>
           </div>
           <router-link to="/library" class="header__link">Biblioteca</router-link>
+          <router-link to="/history" class="header__link">Histórico</router-link>
           <router-link to="/profile" class="header__link">Perfil</router-link>
           <button @click="handleLogout" class="header__btn header__btn--logout">Sair</button>
         </div>
@@ -220,13 +222,14 @@ export default {
 }
 
 .header__btn--logout {
-  background: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  border: 1px solid rgba(231, 76, 60, 0.3);
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .header__btn--logout:hover {
-  background: rgba(231, 76, 60, 0.2);
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.5);
 }
 
 @media (max-width: 768px) {

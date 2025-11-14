@@ -3,7 +3,7 @@
     <div class="users-page__container">
       <div class="users-page__header">
         <h1 class="users-page__title">Usuários</h1>
-        <p class="users-page__subtitle">
+        <p class="users-page__subtitle" v-if="!loading">
           {{ pagination.total }} usuários cadastrados
         </p>
       </div>
@@ -24,7 +24,7 @@
 
       <div v-else-if="users.length > 0" class="users-grid">
         <div
-          v-for="user in paginatedUsers"
+          v-for="user in users"
           :key="user.id"
           class="user-card"
           @click="goToUserProfile(user.id)"
@@ -48,20 +48,20 @@
         <p>Nenhum usuário encontrado.</p>
       </div>
 
-      <div v-if="!loading && users.length > 0" class="pagination">
+      <div v-if="!loading && pagination.total > 0" class="pagination">
         <button
           @click="previousPage"
-          :disabled="currentPage === 1"
+          :disabled="pagination.current_page === 1"
           class="pagination__btn"
         >
           Anterior
         </button>
         <span class="pagination__info">
-          Página {{ currentPage }} de {{ totalPages }}
+          Página {{ pagination.current_page }} de {{ totalPages }} ({{ pagination.total }} usuários)
         </span>
         <button
           @click="nextPage"
-          :disabled="currentPage === totalPages"
+          :disabled="pagination.current_page === totalPages"
           class="pagination__btn"
         >
           Próxima
@@ -89,38 +89,48 @@ export default {
       total: 0,
     });
 
-    const filteredUsers = computed(() => {
-      if (!searchQuery.value) return users.value;
-      const query = searchQuery.value.toLowerCase();
-      return users.value.filter(
-        (user) =>
-          user.name.toLowerCase().includes(query) ||
-          user.email.toLowerCase().includes(query)
-      );
-    });
-
-    const totalPages = computed(() => {
-      return Math.ceil(filteredUsers.value.length / itemsPerPage);
-    });
-
-    const paginatedUsers = computed(() => {
-      const start = (currentPage.value - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      return filteredUsers.value.slice(start, end);
-    });
-
     const loadUsers = async () => {
       loading.value = true;
       try {
-        const response = await api.get('/api/users');
-        users.value = response.data || [];
-        pagination.value.total = users.value.length;
+        const params = {
+          page: currentPage.value,
+          per_page: itemsPerPage,
+        };
+        
+        if (searchQuery.value && searchQuery.value.trim()) {
+          params.search = searchQuery.value.trim();
+        }
+        
+        const response = await api.get('/api/users', { params });
+        
+        if (response.data && response.data.data) {
+          users.value = response.data.data;
+          pagination.value = {
+            total: response.data.total || 0,
+            current_page: response.data.current_page || currentPage.value,
+            last_page: response.data.last_page || 1,
+            per_page: response.data.per_page || itemsPerPage,
+          };
+          currentPage.value = response.data.current_page || currentPage.value;
+        } else {
+          users.value = [];
+          pagination.value.total = 0;
+        }
       } catch (error) {
         users.value = [];
+        pagination.value.total = 0;
       } finally {
         loading.value = false;
       }
     };
+
+    const totalPages = computed(() => {
+      return pagination.value.last_page || 1;
+    });
+
+    const paginatedUsers = computed(() => {
+      return users.value;
+    });
 
     const getUserInitials = (name) => {
       if (!name) return 'U';
@@ -133,6 +143,7 @@ export default {
 
     const handleSearch = () => {
       currentPage.value = 1;
+      loadUsers();
     };
 
     const goToUserProfile = (userId) => {
@@ -140,15 +151,17 @@ export default {
     };
 
     const nextPage = () => {
-      if (currentPage.value < totalPages.value) {
-        currentPage.value++;
+      if (pagination.value.current_page < totalPages.value) {
+        currentPage.value = pagination.value.current_page + 1;
+        loadUsers();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
     const previousPage = () => {
-      if (currentPage.value > 1) {
-        currentPage.value--;
+      if (pagination.value.current_page > 1) {
+        currentPage.value = pagination.value.current_page - 1;
+        loadUsers();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
@@ -163,14 +176,13 @@ export default {
       searchQuery,
       currentPage,
       pagination,
-      filteredUsers,
       totalPages,
-      paginatedUsers,
       getUserInitials,
       handleSearch,
       goToUserProfile,
       nextPage,
       previousPage,
+      loadUsers,
     };
   },
 };

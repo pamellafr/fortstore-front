@@ -140,7 +140,7 @@ export default {
 }
 
 .cosmetic-card--owned {
-  border-color: rgba(46, 204, 113, 0.3);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 .cosmetic-card--owned::before {
@@ -150,12 +150,12 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(90deg, #667eea 0%, #8b9aff 100%);
   z-index: 1;
 }
 
 .cosmetic-card--new {
-  border-color: rgba(46, 204, 113, 0.3);
+  border-color: rgba(118, 75, 162, 0.3);
 }
 
 .cosmetic-card--new::before {
@@ -165,13 +165,13 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(90deg, #764ba2 0%, #9b59b6 100%);
   z-index: 1;
 }
 
 .cosmetic-card--owned.cosmetic-card--new::before {
-  background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
-  border-color: rgba(52, 152, 219, 0.3);
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 .cosmetic-card__badges {
@@ -195,28 +195,28 @@ export default {
 }
 
 .cosmetic-card__badge--new {
-  background: rgba(46, 204, 113, 0.9);
+  background: rgba(118, 75, 162, 0.9);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+  box-shadow: 0 2px 8px rgba(118, 75, 162, 0.3);
 }
 
 .cosmetic-card__badge--sale {
-  background: rgba(231, 76, 60, 0.9);
+  background: rgba(102, 126, 234, 0.9);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .cosmetic-card__badge--promoted {
-  background: rgba(241, 196, 15, 0.9);
-  color: #1a1a1a;
-  box-shadow: 0 2px 8px rgba(241, 196, 15, 0.3);
+  background: rgba(118, 75, 162, 0.9);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(118, 75, 162, 0.3);
   font-weight: 800;
 }
 
 .cosmetic-card__badge--owned {
-  background: rgba(52, 152, 219, 0.9);
+  background: rgba(102, 126, 234, 0.9);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .cosmetic-card__image-wrapper {
