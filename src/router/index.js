@@ -59,6 +59,17 @@ const routes = [
     component: () => import('../views/UserProfile.vue'),
     props: true,
   },
+  {
+    path: '/bundles',
+    name: 'Bundles',
+    component: () => import('../views/Bundles.vue'),
+  },
+  {
+    path: '/bundle/:id',
+    name: 'BundleDetail',
+    component: () => import('../views/BundleDetail.vue'),
+    props: true,
+  },
 ];
 
 const router = createRouter({
